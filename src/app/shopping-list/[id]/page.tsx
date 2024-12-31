@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/context/UserContext";
 
@@ -14,7 +14,6 @@ interface ShoppingListItem {
 
 export default function ShoppingListDetail() {
   const { id: listId } = useParams();
-  const router = useRouter();
   const { user } = useUser();
 
   const [items, setItems] = useState<ShoppingListItem[]>([]);

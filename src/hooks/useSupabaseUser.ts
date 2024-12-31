@@ -3,10 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { User } from "@supabase/supabase-js";
 
 // カスタムフック：ログイン中ユーザーの情報を返す
 export function useSupabaseUser() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
