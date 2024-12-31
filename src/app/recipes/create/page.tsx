@@ -19,7 +19,7 @@ export default function CreateRecipePage() {
     }
 
     // recipes テーブルに insert
-    const { data, error } = await supabase.from("recipes").insert([
+    const { error } = await supabase.from("recipes").insert([
       {
         user_id: user.id,
         title,
