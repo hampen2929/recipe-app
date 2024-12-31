@@ -1,11 +1,22 @@
+// src/app/recipes/page.tsx
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/context/UserContext";
 
+interface Recipe {
+  id: string;
+  title: string;
+  description?: string;
+  user_id?: string;
+  created_at?: string;
+  // 必要に応じて追加
+}
+
 export default function RecipesPage() {
-  const [recipes, setRecipes] = useState<any[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const { user } = useUser();
