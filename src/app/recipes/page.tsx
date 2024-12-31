@@ -1,10 +1,9 @@
-// src/app/recipes/page.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/context/UserContext";
+import Link from "next/link"; // リンク用
 
 interface Recipe {
   id: string;
@@ -22,13 +21,11 @@ export default function RecipesPage() {
   const { user } = useUser();
 
   useEffect(() => {
-    // userがnullなら何もしない
     if (!user) return;
 
-    // userが存在する場合のみ処理を行う
     async function fetchRecipes() {
       if (!user) return;
-      
+
       const { data, error } = await supabase
         .from("recipes")
         .select("*")
@@ -52,6 +49,12 @@ export default function RecipesPage() {
   return (
     <main style={{ padding: "1rem" }}>
       <h1>My Recipes</h1>
+
+      {/* 新規レシピ作成ページへの導線を追加 */}
+      <Link href="/recipes/create" style={{ marginBottom: "1rem", display: "inline-block" }}>
+        <button>レシピを新規作成</button>
+      </Link>
+
       {error && <p style={{ color: "red" }}>{error}</p>}
       {recipes.length === 0 ? (
         <p>まだレシピがありません。</p>
