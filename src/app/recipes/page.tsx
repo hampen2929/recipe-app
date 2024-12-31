@@ -1,38 +1,33 @@
-// src/app/recipes/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import Link from "next/link";
 import { useUser } from "@/context/UserContext";
 
-interface Recipe {
-  id: string;
-  title: string;
-  description: string | null;
-}
-
 export default function RecipesPage() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const { user } = useUser();
 
   useEffect(() => {
+    // userがnullなら何もしない
     if (!user) return;
 
-    // 自分のレシピを取得
+    // userが存在する場合のみ処理を行う
     async function fetchRecipes() {
+      if (!user) return;
+      
       const { data, error } = await supabase
         .from("recipes")
         .select("*")
-        .eq("user_id", user.id) // RLSが効いていれば eq() 無しでもOK
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) {
         setError(error.message);
       } else if (data) {
-        setRecipes(data as Recipe[]);
+        setRecipes(data);
       }
     }
 
@@ -46,10 +41,6 @@ export default function RecipesPage() {
   return (
     <main style={{ padding: "1rem" }}>
       <h1>My Recipes</h1>
-      <Link href="/recipes/create" style={{ marginBottom: "1rem", display: "inline-block" }}>
-        新規レシピ作成
-      </Link>
-
       {error && <p style={{ color: "red" }}>{error}</p>}
       {recipes.length === 0 ? (
         <p>まだレシピがありません。</p>
@@ -57,9 +48,7 @@ export default function RecipesPage() {
         <ul>
           {recipes.map((recipe) => (
             <li key={recipe.id} style={{ marginBottom: "1rem" }}>
-              <Link href={`/recipes/${recipe.id}`}>
-                <strong>{recipe.title}</strong>
-              </Link>
+              <strong>{recipe.title}</strong>
               <p>{recipe.description}</p>
             </li>
           ))}
